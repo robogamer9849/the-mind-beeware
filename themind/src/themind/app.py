@@ -92,7 +92,7 @@ class HomeApp(toga.App):
     def create_home_box(self):
         box = toga.Box(style=Pack(direction=COLUMN, padding=10 ))
         title = toga.Label("Do you want to host (server) or connect as a client?",
-                           style=Pack(padding_bottom=10))
+                            style=Pack(padding_bottom=10))
         box.add(title)
         
         # Row for Host and Client options
@@ -105,9 +105,9 @@ class HomeApp(toga.App):
         # Client section: text input and connect button
         client_box = toga.Box(style=Pack(direction=COLUMN ))
         self.client_ip_input = toga.TextInput(placeholder="Connect code (IP)",
-                                              style=Pack(width=200))
+                                                style=Pack(width=200))
         connect_button = toga.Button("Client", on_press=self.on_connect_press,
-                                     style=Pack(padding=5))
+                                        style=Pack(padding=5))
         client_box.add(self.client_ip_input)
         client_box.add(connect_button)
         
@@ -179,18 +179,21 @@ class HomeApp(toga.App):
         threading.Timer(1.0, self.auto_connect_client, args=(code,)).start()
 
     def auto_connect_client(self, code):
+        host = '0.0.0.0'
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
-                client_socket.connect((code, PORT))
+                client_socket.connect((host, PORT))
                 client_socket.sendall("give me".encode())
                 data = client_socket.recv(1024)
                 number = data.decode()
-                print("Auto-connected; received number:", number)
-                self.set_game_screen(number, code)
-                # Switch to game screen on the main thread.
+                print("Received number:", number)
+                self.set_game_screen(number, find_code())
                 self.main_window.content = self.game_box
-        except Exception as e:
-            self.server_status_label.text = f"Auto-connect failed: {e}"
+        except OSError as e:
+            error_text = f"Error: {e}. Check the IP or network."
+            print(error_text)
+            self.home_status_label.text = error_text
+
 
     def set_game_screen(self, number, host):
         self.number_label.text = f"Your number: {number}"
