@@ -182,3 +182,6 @@ requires = [
 ]
 style_framework = "Shoelace v2.3"
 
+
+icon = "icons/icon"
+splash_background_color = "#D3E6F5"

@@ -19,11 +19,6 @@ def find_code():
     return ip
 
 
-def get_min(nums):
-    if not nums:
-            return None
-        return min(nums)
-    
 
 # --- Global Variables and Network Code ---
 
@@ -45,15 +40,6 @@ def handle_client(conn, addr, num):
             print(f"Received from {addr}: {message}")
             if message == 'give me':
                 conn.sendall(f"{num}".encode())
-            elif message == 'I showed':
-                if num in nums:
-                    nums.remove(num)
-                current_min = get_min(nums)
-                print("Remaining numbers:", nums, "Current min:", current_min)
-                if current_min is None or num < current_min:
-                    conn.sendall("you are right\n".encode())
-                else:
-                    conn.sendall("you lose\n".encode())
         except ConnectionResetError:
             print(f"Client {addr} has disconnected.")
             break
@@ -127,13 +113,13 @@ class HomeApp(toga.App):
     def create_server_box(self):
         box = toga.Box(style=Pack(direction=COLUMN, padding=10 ))
         self.server_status_label = toga.Label("Press 'Start Server' to begin hosting",
-                                              style=Pack(padding_bottom=10))
+                                                style=Pack(padding_bottom=10))
         box.add(self.server_status_label)
         
         start_button = toga.Button("Start Server", on_press=self.start_server_thread,
-                                   style=Pack(padding=5))
+                                    style=Pack(padding=5))
         back_button = toga.Button("Back to Home", on_press=self.go_home,
-                                  style=Pack(padding=5))
+                                    style=Pack(padding=5))
         box.add(start_button)
         box.add(back_button)
         return box
@@ -141,16 +127,16 @@ class HomeApp(toga.App):
     def create_game_box(self):
         box = toga.Box(style=Pack(direction=COLUMN, padding=10 ))
         self.number_label = toga.Label("Your number: ", style=Pack(font_size=20))
-        self.status_label = toga.Label("Game in progress...", style=Pack(font_size=16))
+        self.status_label = toga.Label("", style=Pack(font_size=16))
         self.ip_label = toga.Label("", style=Pack(font_size=14))
         
-        show_button = toga.Button("SHOW", on_press=self.on_show_press, style=Pack(padding=5))
+        # show_button = toga.Button("SHOW", on_press=self.on_show_press, style=Pack(padding=5))
         back_button = toga.Button("Back to Home", on_press=self.go_home, style=Pack(padding=5))
         
         box.add(self.number_label)
         box.add(self.status_label)
         box.add(self.ip_label)
-        box.add(show_button)
+        # box.add(show_button)
         box.add(back_button)
         return box
 
