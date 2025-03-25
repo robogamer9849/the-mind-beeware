@@ -18,6 +18,13 @@ def find_code():
     s.close()
     return ip
 
+
+def get_min(nums):
+    if not nums:
+            return None
+        return min(nums)
+    
+
 # --- Global Variables and Network Code ---
 
 HOST = '0.0.0.0'
@@ -49,8 +56,6 @@ def handle_client(conn, addr, num):
                     conn.sendall("you lose\n".encode())
         except ConnectionResetError:
             print(f"Client {addr} has disconnected.")
-            if num in nums:
-                nums.remove(num)
             break
     conn.close()
     print(f"Connection with {addr} closed.")
