@@ -170,7 +170,7 @@ class HomeApp(toga.App):
         threading.Timer(1.0, self.auto_connect_client, args=(code,)).start()
 
     def auto_connect_client(self, code):
-        host = '0.0.0.0'
+        host = '127.0.0.1'
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
                 client_socket.connect((host, PORT))
