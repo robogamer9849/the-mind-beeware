@@ -1,5 +1,5 @@
 """
-game coard The maind mad to a mobile game
+game card The mind mad to a mobile game
 """
 
 import toga
