@@ -2,7 +2,6 @@
 game card The mind mad to a mobile game
 """
 
-#TODO: fix the connection
 
 import toga
 from toga.style import Pack
