@@ -35,22 +35,36 @@ def set_max(Max):
 
 HOST = '0.0.0.0'
 PORT = 6000
-nums = []
+nums = {}
 
 def handle_client(conn, addr, num):
     print(f"Connection established with {addr}.")
-    nums.append(num)
     while True:
         try:
             data = conn.recv(1024)
             if not data:
-                if num in nums:
-                    nums.remove(num)
                 break
             message = data.decode()
             print(f"Received from {addr}: {message}")
             if message == 'give me':
-                conn.sendall(f"{num}".encode())
+                if addr[0] not in nums:
+                    nums[addr[0]] = num
+                    num = nums[addr[0]]
+                    conn.sendall(f"{num}".encode())
+                else:
+                    print(nums[addr[0]])
+                    conn.sendall(f"{nums[addr[0]]}".encode())
+            elif message == 'I showed':
+                min_num = min(nums.values())
+                if nums[addr[0]] == min_num:
+                    conn.sendall("you won!".encode())
+                    nums.pop(addr[0])
+                else:
+                    conn.sendall("you lost!".encode())
+                    nums.clear()
+                
+            print(nums[addr[0]])
+            
         except ConnectionResetError:
             print(f"Client {addr} has disconnected.")
             break
@@ -67,10 +81,9 @@ def start_server():
         print("Connect code:", code)
         while True:
             conn, addr = server_socket.accept()
-            print(max)
-            thread = threading.Thread(target=handle_client, args=(conn, addr, random.randint(1, max)))
-            thread.start()
+            thread = threading.Thread(target=handle_client, args=(conn, addr, random.randint(1, max))).start()
             print(f"Active connections: {threading.active_count() - 1}")
+            print(nums)
 
 def start_server_in_background():
     print("start_server_in_background")
@@ -151,13 +164,13 @@ class HomeApp(toga.App):
         self.status_label = toga.Label("", style=Pack(font_size=16))
         self.ip_label = toga.Label("", style=Pack(font_size=14))
         
-        # show_button = toga.Button("SHOW", on_press=self.on_show_press, style=Pack(padding=5))
+        show_button = toga.Button("SHOW", on_press=self.on_show_press, style=Pack(padding=5))
         back_button = toga.Button("Back to Home", on_press=self.go_home, style=Pack(padding=5))
         
         box.add(self.number_label)
         box.add(self.status_label)
         box.add(self.ip_label)
-        # box.add(show_button)
+        box.add(show_button)
         box.add(back_button)
         return box
 
@@ -185,14 +198,13 @@ class HomeApp(toga.App):
 
     async def start_server_thread(self, widget):
         code = find_code()  # Assume this returns the device's IP code.
-        self.server_status_label.text = f"Server started!\nConnect code: {code}\nListening on port {PORT}"
-        self.server_status_label.text = f"{start_server_in_background()}\nConnect code: {code}\nListening on port {PORT}"
+        self.server_status_label.text = f"{start_server_in_background()}!\nConnect code: {code}\nListening on port {PORT}"
         await asyncio.sleep(1)
         self.auto_connect_client()
 
     def auto_connect_client(self):
         print(f"Auto-connecting to host")
-        host = '127.0.0.1'
+        host = find_code()
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
                 client_socket.connect((host, PORT))
@@ -213,7 +225,7 @@ class HomeApp(toga.App):
         self.ip_label.text = f"Code (IP): {host}"
         self.status_label.text = "Game in progress..."
 
-    def on_show_press(self, widget):
+    async def on_show_press(self, widget):
         # When SHOW is pressed, send the "I showed" command to the server.
         host_text = self.ip_label.text.replace("Code (IP): ", "").strip()
         try:
@@ -222,7 +234,10 @@ class HomeApp(toga.App):
                 client_socket.sendall("I showed".encode())
                 data = client_socket.recv(1024)
                 response = data.decode()
-                self.status_label.text = f"Result: {response}"
+                self.status_label.text = f"{response}"
+                if response == "You lost!":
+                    await asyncio.sleep(2)
+                    self.go_home()
         except Exception as e:
             self.status_label.text = f"Error: {e}"
 
