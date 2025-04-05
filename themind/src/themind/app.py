@@ -55,14 +55,16 @@ def handle_client(conn, addr, num):
                     conn.sendall(f"{nums[addr[0]]}".encode())
             elif message == 'I showed':
                 min_num = min(nums.values())
-                if nums[addr[0]] == min_num:
-                    conn.sendall("you won!".encode())
-                    nums.pop(addr[0])
-                else:
-                    conn.sendall("you lost!".encode())
-                    nums.clear()
-                
-            
+                try:
+                    if nums[addr[0]] == min_num:
+                        conn.sendall("you won!".encode())
+                        nums.pop(addr[0])
+                    else:
+                        conn.sendall("you lost!".encode())
+                        nums.clear()
+                except KeyError:
+                    conn.sendall("you are not in the game".encode())
+
         except ConnectionResetError:
             print(f"Client {addr} has disconnected.")
             break
