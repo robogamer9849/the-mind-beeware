@@ -62,7 +62,6 @@ def handle_client(conn, addr, num):
                     conn.sendall("you lost!".encode())
                     nums.clear()
                 
-            print(nums[addr[0]])
             
         except ConnectionResetError:
             print(f"Client {addr} has disconnected.")
