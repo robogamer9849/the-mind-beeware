@@ -21,9 +21,17 @@ def find_code():
     s.close()
     return ip
 
+max = 100
+
+def set_max(Max):
+    global max
+    max = Max
+    return max
+
 
 
 # --- Global Variables and Network Code ---
+
 
 HOST = '0.0.0.0'
 PORT = 6000
@@ -59,13 +67,14 @@ def start_server():
         print("Connect code:", code)
         while True:
             conn, addr = server_socket.accept()
-            thread = threading.Thread(target=handle_client, args=(conn, addr, random.randint(1, 1000000)))
+            print(max)
+            thread = threading.Thread(target=handle_client, args=(conn, addr, random.randint(1, max)))
             thread.start()
             print(f"Active connections: {threading.active_count() - 1}")
 
 def start_server_in_background():
     print("start_server_in_background")
-    thread = threading.Thread(target=start_server(), daemon=True)
+    thread = threading.Thread(target=start_server, daemon=True)
     thread.start()
     return "Server started"
 
@@ -116,8 +125,9 @@ class HomeApp(toga.App):
         return box
 
     def set_max_number_value(self, value):
-        self.max_number_label.text = value
-        self.max = value
+        self.max_number_label.text = f"max number : {value}"
+        print(set_max(value))
+
 
     def create_server_box(self):
         box = toga.Box(style=Pack(direction=COLUMN, padding=10 ))
@@ -125,7 +135,7 @@ class HomeApp(toga.App):
         box.add(self.server_status_label)
 
         self.max_number_label = toga.Label("max number : 100", style=Pack(padding_bottom=10))
-        self.slider = toga.Slider(min=100, max=1000000, value=100, tick_count= 100, on_change= lambda slider: self.set_max_number_value(f"max number : {int(self.slider.value)}"))
+        self.slider = toga.Slider(min=100, max=1000000, value=100, tick_count= 100, on_change= lambda slider: self.set_max_number_value(int(self.slider.value)))
         box.add(self.max_number_label)
         box.add(self.slider)
 
@@ -181,8 +191,8 @@ class HomeApp(toga.App):
         self.auto_connect_client()
 
     def auto_connect_client(self):
-        print(f"Auto-connecting to host with code: {code}")
-        host = '0.0.0.0'
+        print(f"Auto-connecting to host")
+        host = '127.0.0.1'
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
                 client_socket.connect((host, PORT))
