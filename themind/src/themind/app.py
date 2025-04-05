@@ -2,7 +2,7 @@
 game card The mind mad to a mobile game
 """
 
-#TODO: use async await to fix auto connect
+#TODO: make a slider for the max number
 
 import toga
 from toga.style import Pack
@@ -58,7 +58,7 @@ def start_server():
         print("Connect code:", code)
         while True:
             conn, addr = server_socket.accept()
-            thread = threading.Thread(target=handle_client, args=(conn, addr, random.randint(1, 1000000)))
+            thread = threading.Thread(target=handle_client, args=(conn, addr, random.randint(1, self.max)))
             thread.start()
             print(f"Active connections: {threading.active_count() - 1}")
 
@@ -113,16 +113,22 @@ class HomeApp(toga.App):
         box.add(self.home_status_label)
         return box
 
+    def set_max_number_value(self, value):
+        self.max_number_label.text = value
+        self.max = value
+
     def create_server_box(self):
         box = toga.Box(style=Pack(direction=COLUMN, padding=10 ))
-        self.server_status_label = toga.Label("Press 'Start Server' to begin hosting",
-                                                style=Pack(padding_bottom=10))
+        self.server_status_label = toga.Label("Press 'Start Server' to begin hosting", style=Pack(padding_bottom=10))
         box.add(self.server_status_label)
-        
-        start_button = toga.Button("Start Server", on_press=self.start_server_thread,
-                                    style=Pack(padding=5))
-        back_button = toga.Button("Back to Home", on_press=self.go_home,
-                                    style=Pack(padding=5))
+
+        self.max_number_label = toga.Label("max number : 100", style=Pack(padding_bottom=10))
+        slider = toga.Slider(min=100, max=1000000, value=100, tick_count= 100, on_change= lambda slider: self.set_max_number_value(f"max number : {int(slider.value)}"))
+        box.add(self.max_number_label)
+        box.add(slider)
+
+        start_button = toga.Button("Start Server", on_press=self.start_server_thread,  style=Pack(padding=5))
+        back_button = toga.Button("Back to Home", on_press=self.go_home, style=Pack(padding=5))
         box.add(start_button)
         box.add(back_button)
         return box
@@ -169,7 +175,6 @@ class HomeApp(toga.App):
         code = find_code()  # Assume this returns the device's IP code.
         self.server_status_label.text = f"Server started!\nConnect code: {code}\nListening on port {PORT}"
         self.server_status_label.text = f"{start_server_in_background()}\nConnect code: {code}\nListening on port {PORT}"
-        # start_server_in_background()
         await asyncio.sleep(1)  # Wait for the server to start.
         self.auto_connect_client(code)
 
@@ -177,7 +182,7 @@ class HomeApp(toga.App):
         # threading.Timer(1.0, self.auto_connect_client, args=(code,)).start()
 
     def auto_connect_client(self, code):
-        host = '127.0.0.1'
+        host = '0.0.0.0'
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
                 client_socket.connect((host, PORT))
