@@ -2,6 +2,8 @@
 game card The mind mad to a mobile game
 """
 
+#TODO: use async await to fix auto connect
+
 import toga
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
@@ -9,6 +11,7 @@ from toga.style.pack import COLUMN, ROW
 import socket
 import threading
 import random
+import asyncio
 
 def find_code():
     import socket
@@ -162,12 +165,16 @@ class HomeApp(toga.App):
             print(error_text)
             self.home_status_label.text = error_text
 
-    def start_server_thread(self, widget):
+    async def start_server_thread(self, widget):
         code = find_code()  # Assume this returns the device's IP code.
         self.server_status_label.text = f"Server started!\nConnect code: {code}\nListening on port {PORT}"
-        start_server_in_background()
+        self.server_status_label.text = f"{start_server_in_background()}\nConnect code: {code}\nListening on port {PORT}"
+        # start_server_in_background()
+        await asyncio.sleep(1)  # Wait for the server to start.
+        self.auto_connect_client(code)
+
         # Auto-connect as client after a short delay using threading.Timer.
-        threading.Timer(1.0, self.auto_connect_client, args=(code,)).start()
+        # threading.Timer(1.0, self.auto_connect_client, args=(code,)).start()
 
     def auto_connect_client(self, code):
         host = '127.0.0.1'
