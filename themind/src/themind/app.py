@@ -36,7 +36,7 @@ stl_home_status_label = Pack(padding=(0, 10, 0, 10), font_size=16, color='#66666
 stl_create_server_box = Pack(direction=COLUMN, padding=20, alignment='center')
 stl_server_status_label = Pack(padding=(0, 10, 0, 10), font_size=16, color='#666666')
 stl_max_number_label = Pack(padding=(0, 10, 0, 10), font_size=16)
-stl_max_number_slider = Pack(padding=(0, 15, 0, 15), width=250)
+stl_max_number_slider = Pack(padding=(0, 15, 0, 15))
 stl_start_button = Pack(padding=(15, 10, 15, 10), font_size=16, background_color='#4CAF50', color='white')
 
 # game page
@@ -176,8 +176,13 @@ class HomeApp(toga.App):
         return box
 
     def set_max_number_value(self, value):
-        self.max_number_label.text = f"max number : {value}"
-        print(set_max(value))
+        print(value)
+        if value == 0:
+            state = 100
+        else:
+            state = value * 1000
+        self.max_number_label.text = f"max number : {state}"
+        set_max(state)
 
 
     def create_server_box(self):
@@ -186,7 +191,7 @@ class HomeApp(toga.App):
         box.add(self.server_status_label)
 
         self.max_number_label = toga.Label("max number : 100", style=stl_max_number_label)
-        self.slider = toga.Slider(min=100, max=1000000, value=100, tick_count= 100, on_change= lambda slider: self.set_max_number_value(int(self.slider.value), style=stl_max_number_slider))
+        self.slider = toga.Slider(min=0, max=1000, value=0, style=stl_max_number_slider, on_change= lambda slider: self.set_max_number_value(int(self.slider.value)))
         box.add(self.max_number_label)
         box.add(self.slider)
 
@@ -201,7 +206,7 @@ class HomeApp(toga.App):
         self.number_label = toga.Label("Your number: ", style=stl_number_label)
         self.status_label = toga.Label("", style=stl_status_label)
         self.ip_label = toga.Label("", style=stl_ip_label)
-        
+
         show_button = toga.Button("SHOW", on_press=self.on_show_press, style=stl_show_button)
         back_button = toga.Button("Back to Home", on_press=self.go_home, style=stl_back_button)
         
