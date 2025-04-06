@@ -30,7 +30,8 @@ stl_client_box = Pack(direction=COLUMN, padding=20, alignment='center')
 stl_client_ip_input = Pack(padding=(10, 15, 10, 15), width=200, font_size=16)
 stl_connect_button = Pack(padding=(15, 10, 15, 10), font_size=16, background_color='#2196F3', color='white')
 
-stl_home_status_label = Pack(padding=(0, 10, 0, 10), font_size=16, color='#666666')
+stl_home_status_label = Pack(font_size=16, color='#666666', background_color='#f6f5f4')
+stl_tutorial_label = Pack(padding=(0, 10, 0, 10), font_size=16, font_weight='bold', color='#333333', background_color='#FFE082', flex=1)
 
 # create server page
 stl_create_server_box = Pack(direction=COLUMN, padding=20, alignment='center')
@@ -72,6 +73,31 @@ def set_max(Max):
 
 # --- Global Variables and Network Code ---
 
+HELP_TEXT = '''🎮 Welcome to The Mind - A Game of Intuition! 🎮
+
+First Things First:
+🤝 Gather your friends! (The more the merrier!)
+
+Setting Up the Server:
+📱 Get everyone to download this app (Android only for now)
+📶 Connect all devices to the same WiFi network
+🎯 Open the app and hit 'HOST'
+🔢 Pick your maximum number challenge
+
+Joining the Game:
+📝 On your friends' phones, enter the special code (IP) from the host
+🔗 Hit 'CONNECT' to join the fun!
+
+Game Rules - It's Mind-Bending! 🤯
+• You'll get a secret number (shhhh, keep it to yourself!)
+• Think you've got the lowest number? Show it! (tap 'SHOW')
+• Guessed right? You're safe! 🎉
+• Guessed wrong? BOOM! Game over! 💥
+• If anyone fails, everyone fails!
+• Win together by revealing numbers in ascending order
+• After each round, everyone needs to rejoin (we're working on making this automatic!)
+
+🎲 Ready to test your telepathic powers? Let the games begin! 🎲'''
 
 HOST = '0.0.0.0'
 PORT = 6000
@@ -171,7 +197,11 @@ class HomeApp(toga.App):
         box.add(options_box)
         
         # Status label for errors or info
-        self.home_status_label = toga.Label("", style=stl_home_status_label)
+        self.home_status_label = toga.MultilineTextInput(readonly = True, style=stl_home_status_label)
+
+        tutorial_label = toga.MultilineTextInput(value=HELP_TEXT, readonly=True, style=stl_tutorial_label)
+
+        box.add(tutorial_label)
         box.add(self.home_status_label)
         return box
 
@@ -237,7 +267,7 @@ class HomeApp(toga.App):
         except OSError as e:
             error_text = f"Error: {e}. Check the IP or network."
             print(error_text)
-            self.home_status_label.text = error_text
+            self.home_status_label.value = error_text
 
     async def start_server_thread(self, widget):
         code = find_code()  # Assume this returns the device's IP code.
