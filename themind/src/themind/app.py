@@ -12,6 +12,47 @@ import threading
 import random
 import asyncio
 
+
+'''everything under this comment is for the style of the app'''
+
+# everywhare
+stl_back_button = Pack(padding=(10, 15, 10, 15), font_size=16)
+
+# home page
+stl_home_box = Pack(direction=COLUMN, padding=20, alignment='center')
+stl_home_btn_box = Pack(direction=COLUMN, padding=20, alignment='center')
+stl_home_title = Pack(padding=(0, 15, 0, 15), font_size=24, font_weight='bold')
+stl_options_box = Pack(direction=ROW, padding=20, alignment='center')
+
+stl_host_button = Pack(padding=(15, 10, 15, 10), font_size=16, background_color='#4CAF50', color='white')
+
+stl_client_box = Pack(direction=COLUMN, padding=20, alignment='center')
+stl_client_ip_input = Pack(padding=(10, 15, 10, 15), width=200, font_size=16)
+stl_connect_button = Pack(padding=(15, 10, 15, 10), font_size=16, background_color='#2196F3', color='white')
+
+stl_home_status_label = Pack(padding=(0, 10, 0, 10), font_size=16, color='#666666')
+
+# create server page
+stl_create_server_box = Pack(direction=COLUMN, padding=20, alignment='center')
+stl_server_status_label = Pack(padding=(0, 10, 0, 10), font_size=16, color='#666666')
+stl_max_number_label = Pack(padding=(0, 10, 0, 10), font_size=16)
+stl_max_number_slider = Pack(padding=(0, 15, 0, 15), width=250)
+stl_start_button = Pack(padding=(15, 10, 15, 10), font_size=16, background_color='#4CAF50', color='white')
+
+# game page
+stl_create_game_box = Pack(direction=COLUMN, padding=20, alignment='center')
+stl_number_label = Pack(padding=(0, 15, 0, 15), font_size=24, font_weight='bold')
+stl_status_label = Pack(padding=(0, 10, 0, 10), font_size=16, color='#666666')
+stl_ip_label = Pack(padding=(0, 10, 0, 10), font_size=16)
+stl_show_button = Pack(padding=(15, 10, 15, 10), font_size=18, background_color='#FF9800', color='white')
+
+
+
+
+'''this is the end of the style code'''
+
+
+
 def find_code():
     import socket
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -108,24 +149,21 @@ class HomeApp(toga.App):
         self.main_window.show()
 
     def create_home_box(self):
-        box = toga.Box(style=Pack(direction=COLUMN, padding=10 ))
-        title = toga.Label("Do you want to host (server) or connect as a client?",
-                            style=Pack(padding_bottom=10))
+        box = toga.Box(style=stl_home_btn_box)
+        title = toga.Label("Do you want to host (server) or connect as a client?", style=stl_home_title)
         box.add(title)
         
         # Row for Host and Client options
-        options_box = toga.Box(style=Pack(direction=ROW ))
+        options_box = toga.Box(style=stl_options_box)
         
         # Host button
-        host_button = toga.Button("Host", on_press=self.go_to_server, style=Pack(padding=5))
+        host_button = toga.Button("Host", on_press=self.go_to_server, style=stl_host_button)
         options_box.add(host_button)
         
         # Client section: text input and connect button
-        client_box = toga.Box(style=Pack(direction=COLUMN ))
-        self.client_ip_input = toga.TextInput(placeholder="Connect code (IP)",
-                                                style=Pack(width=200))
-        connect_button = toga.Button("Client", on_press=self.on_connect_press,
-                                        style=Pack(padding=5))
+        client_box = toga.Box(style=stl_client_box)
+        self.client_ip_input = toga.TextInput(placeholder="Connect code (IP)", style=stl_client_ip_input)
+        connect_button = toga.Button("Client", on_press=self.on_connect_press, style=stl_connect_button)
         client_box.add(self.client_ip_input)
         client_box.add(connect_button)
         
@@ -133,7 +171,7 @@ class HomeApp(toga.App):
         box.add(options_box)
         
         # Status label for errors or info
-        self.home_status_label = toga.Label("", style=Pack(padding_top=10))
+        self.home_status_label = toga.Label("", style=stl_home_status_label)
         box.add(self.home_status_label)
         return box
 
@@ -143,29 +181,29 @@ class HomeApp(toga.App):
 
 
     def create_server_box(self):
-        box = toga.Box(style=Pack(direction=COLUMN, padding=10 ))
-        self.server_status_label = toga.Label("Press 'Start Server' to begin hosting", style=Pack(padding_bottom=10))
+        box = toga.Box(style=stl_create_server_box)
+        self.server_status_label = toga.Label("Press 'Start Server' to begin hosting", style=stl_server_status_label)
         box.add(self.server_status_label)
 
-        self.max_number_label = toga.Label("max number : 100", style=Pack(padding_bottom=10))
-        self.slider = toga.Slider(min=100, max=1000000, value=100, tick_count= 100, on_change= lambda slider: self.set_max_number_value(int(self.slider.value)))
+        self.max_number_label = toga.Label("max number : 100", style=stl_max_number_label)
+        self.slider = toga.Slider(min=100, max=1000000, value=100, tick_count= 100, on_change= lambda slider: self.set_max_number_value(int(self.slider.value), style=stl_max_number_slider))
         box.add(self.max_number_label)
         box.add(self.slider)
 
-        start_button = toga.Button("Start Server", on_press=self.start_server_thread,  style=Pack(padding=5))
-        back_button = toga.Button("Back to Home", on_press=self.go_home, style=Pack(padding=5))
+        start_button = toga.Button("Start Server", on_press=self.start_server_thread,  style=stl_start_button)
+        back_button = toga.Button("Back to Home", on_press=self.go_home, style=stl_back_button)
         box.add(start_button)
         box.add(back_button)
         return box
 
     def create_game_box(self):
-        box = toga.Box(style=Pack(direction=COLUMN, padding=10 ))
-        self.number_label = toga.Label("Your number: ", style=Pack(font_size=20))
-        self.status_label = toga.Label("", style=Pack(font_size=16))
-        self.ip_label = toga.Label("", style=Pack(font_size=14))
+        box = toga.Box(style=stl_create_game_box)
+        self.number_label = toga.Label("Your number: ", style=stl_number_label)
+        self.status_label = toga.Label("", style=stl_status_label)
+        self.ip_label = toga.Label("", style=stl_ip_label)
         
-        show_button = toga.Button("SHOW", on_press=self.on_show_press, style=Pack(padding=5))
-        back_button = toga.Button("Back to Home", on_press=self.go_home, style=Pack(padding=5))
+        show_button = toga.Button("SHOW", on_press=self.on_show_press, style=stl_show_button)
+        back_button = toga.Button("Back to Home", on_press=self.go_home, style=stl_back_button)
         
         box.add(self.number_label)
         box.add(self.status_label)
