@@ -73,31 +73,31 @@ def set_max(Max):
 
 # --- Global Variables and Network Code ---
 
-HELP_TEXT = '''🎮 Welcome to The Mind - A Game of Intuition! 🎮
+HELP_TEXT = '''🎮 THE MIND - WHERE TELEPATHY MEETS FUN! 🎮
 
-First Things First:
-🤝 Gather your friends! (The more the merrier!)
+🌟 LET'S GET THIS PARTY STARTED! 🌟
+👥 Round up your crew - the more players, the more mayhem!
 
-Setting Up the Server:
-📱 Get everyone to download this app (Android only for now)
-📶 Connect all devices to the same WiFi network
-🎯 Open the app and hit 'HOST'
-🔢 Pick your maximum number challenge
+🚀 LAUNCH THE GAME:
+1. 📱 Share the app with your squad (Android gang only for now!)
+2. 📶 Everyone hop on the same WiFi
+3. 🎯 One brave soul hits 'HOST'
+4. 🎲 Pick your challenge level
 
-Joining the Game:
-📝 On your friends' phones, enter the special code (IP) from the host
-🔗 Hit 'CONNECT' to join the fun!
+🔥 JOIN THE ADVENTURE:
+• 📝 Grab that special code from your host
+• 🎯 Smash that 'CONNECT' button
+• 🌈 Let the magic begin!
 
-Game Rules - It's Mind-Bending! 🤯
-• You'll get a secret number (shhhh, keep it to yourself!)
-• Think you've got the lowest number? Show it! (tap 'SHOW')
-• Guessed right? You're safe! 🎉
-• Guessed wrong? BOOM! Game over! 💥
-• If anyone fails, everyone fails!
-• Win together by revealing numbers in ascending order
-• After each round, everyone needs to rejoin (we're working on making this automatic!)
+🎪 GAME TIME - IT'S MIND-BLOWING! 🎪
+• 🎭 You'll get a super-secret number (no peeking!)
+• 🎯 Feel like you're holding the lowest number? SHOW IT!
+• ⭐ Nailed it? You're a legend!
+• 💥 Missed it? KABOOM! Everyone goes down!
+• 🎪 Victory dance when you reveal ALL numbers in order
+• 🔄 Quick reset between rounds (auto-reset coming soon!)
 
-🎲 Ready to test your telepathic powers? Let the games begin! 🎲'''
+🌟 READY TO BLOW SOME MINDS? LET'S ROLL! 🌟'''
 
 HOST = '0.0.0.0'
 PORT = 6000
