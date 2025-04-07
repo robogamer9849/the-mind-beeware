@@ -22,12 +22,12 @@ stl_back_button = Pack(padding=(10, 15, 10, 15), font_size=16)
 stl_home_box = Pack(direction=COLUMN, padding=20, alignment='center')
 stl_home_btn_box = Pack(direction=COLUMN, padding=20, alignment='center')
 stl_home_title = Pack(padding=(0, 15, 0, 15), font_size=24, font_weight='bold')
-stl_options_box = Pack(direction=ROW, padding=20, alignment='center')
+stl_options_box = Pack(direction=COLUMN, padding=20, alignment='center')
 
 stl_host_button = Pack(padding=(15, 10, 15, 10), font_size=16, background_color='#4CAF50', color='white')
 
 stl_client_box = Pack(direction=COLUMN, padding=20, alignment='center')
-stl_client_ip_input = Pack(padding=(10, 15, 10, 15), width=200, font_size=16)
+stl_client_ip_input = Pack(padding=(10, 15, 10, 15), font_size=16)
 stl_connect_button = Pack(padding=(15, 10, 15, 10), font_size=16, background_color='#2196F3', color='white')
 
 stl_home_status_label = Pack(font_size=16, color='#666666', background_color='#f6f5f4')
@@ -176,15 +176,12 @@ class HomeApp(toga.App):
 
     def create_home_box(self):
         box = toga.Box(style=stl_home_btn_box)
-        title = toga.Label("🎮 Ready to play? Let's go! 🎲", style=stl_home_title)        
+        title = toga.Label("🎮 Ready to play?\nLet's go! 🎲", style=stl_home_title)        
         box.add(title)
         
         # Row for Host and Client options
         options_box = toga.Box(style=stl_options_box)
         
-        # Host button
-        host_button = toga.Button("Host", on_press=self.go_to_server, style=stl_host_button)
-        options_box.add(host_button)
         
         # Client section: text input and connect button
         client_box = toga.Box(style=stl_client_box)
@@ -195,6 +192,10 @@ class HomeApp(toga.App):
         
         options_box.add(client_box)
         box.add(options_box)
+        
+        # Host button
+        host_button = toga.Button("Host", on_press=self.go_to_server, style=stl_host_button)
+        options_box.add(host_button)
         
         # Status label for errors or info
         self.home_status_label = toga.MultilineTextInput(readonly = True, style=stl_home_status_label)
