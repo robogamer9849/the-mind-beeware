@@ -176,8 +176,7 @@ class HomeApp(toga.App):
 
     def create_home_box(self):
         box = toga.Box(style=stl_home_btn_box)
-        title = toga.Label("Host or join a game?", style=stl_home_title)
-        box.add(title)
+        title = toga.Label("🎮 Ready to play? Let's go! 🎲", style=stl_home_title)        box.add(title)
         
         # Row for Host and Client options
         options_box = toga.Box(style=stl_options_box)
