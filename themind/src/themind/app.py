@@ -3,7 +3,7 @@ game card The mind mad to a mobile game
 """
 
 
-import toga
+import toga # type: ignore
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
 
@@ -176,7 +176,8 @@ class HomeApp(toga.App):
 
     def create_home_box(self):
         box = toga.Box(style=stl_home_btn_box)
-        title = toga.Label("🎮 Ready to play? Let's go! 🎲", style=stl_home_title)        box.add(title)
+        title = toga.Label("🎮 Ready to play? Let's go! 🎲", style=stl_home_title)        
+        box.add(title)
         
         # Row for Host and Client options
         options_box = toga.Box(style=stl_options_box)
