@@ -3,7 +3,7 @@ game card The mind mad to a mobile game
 """
 
 
-import toga # type: ignore
+import toga
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
 
