@@ -2,7 +2,7 @@
 [tool.briefcase]
 project_name = "The Mind"
 bundle = "com.example"
-version = "0.0.1"
+version = "0.1.3"
 url = "https://example.com/themind"
 license.file = "LICENSE"
 author = "taha415"
@@ -10,7 +10,7 @@ author_email = "taha415@example.com"
 
 [tool.briefcase.app.themind]
 formal_name = "The Mind"
-description = "game coard The maind mad to a mobile game"
+description = "game card The mind made to a mobile game"
 long_description = """More details about the app should go here.
 """
 sources = [
