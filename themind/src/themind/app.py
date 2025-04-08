@@ -324,10 +324,9 @@ class HomeApp(toga.App):
                 data = client_socket.recv(1024)
                 response = data.decode()
                 self.status_label.text = f"{response}"
-                if response == "You won!":
-                    playsound("resources/win.mp3")
                 if response == "You lost!":
-                    playsound("resources/lost.mp3")
+                    await asyncio.sleep(2)
+                    self.go_home()
         except Exception as e:
             self.status_label.text = f"Error: {e}"
 
