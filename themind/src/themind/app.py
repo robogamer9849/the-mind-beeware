@@ -17,7 +17,10 @@ import asyncio
 
 # everywhare
 stl_back_button = Pack(padding=(10, 15, 10, 15), font_size=16)
-stl_game_img = Pack(width=150, height=150, flex = 1, visibility = "hidden")
+stl_game_img = Pack(width=150, height=150, flex = 1)
+stl_game_win_img = Pack(width=150, height=150, flex = 1, visibility = "hidden")
+stl_game_lose_img = Pack(width=150, height=150, flex = 1, visibility = "hidden")
+
 
 # home page
 stl_scrollview = Pack(direction=COLUMN, padding=1, alignment='center')
@@ -250,11 +253,11 @@ class HomeApp(toga.App):
         self.show_button = toga.Button("SHOW", on_press=self.on_show_press, style=stl_show_button)
         back_button = toga.Button("Back to Home", on_press=self.go_home, style=stl_back_button)
 
-        # game_img = toga.Image(self.paths.app / "resources/win.png")
-        # self.state_win_img = toga.ImageView(image = game_img, style=stl_game_img)
+        game_img = toga.Image(self.paths.app / "resources/win.png")
+        self.state_win_img = toga.ImageView(image = game_img, style=stl_game_win_img)
 
         game_img = toga.Image(self.paths.app / "resources/lost.png")
-        self.state_lost_img = toga.ImageView(image = game_img, style=stl_game_img)
+        self.state_lost_img = toga.ImageView(image = game_img, style=stl_game_lose_img)
 
         box.add(self.number_label)
         box.add(self.status_label)
@@ -262,7 +265,7 @@ class HomeApp(toga.App):
         box.add(self.show_button)
         box.add(back_button)
         # box.add(self.state_img)
-        # box.add(self.state_win_img)
+        box.add(self.state_win_img)
         box.add(self.state_lost_img)
         return box
 
@@ -337,10 +340,11 @@ class HomeApp(toga.App):
                 self.status_label.text = f"{response}"
                 if response == "You won!":
                     await asyncio.sleep(2)
-                    self.state_win_img.visibility = "visible"
+                    stl_game_win_img.visibility = "visible"
                 elif response == "You lost!":
                     await asyncio.sleep(2)
-                    self.state_lost_img.visibility = "visible"
+                    stl_game_lose_img.visibility = "visible"
+                    self.stl_game_lose_img.visibility = "visible"        
         except Exception as e:
             self.status_label.text = f"Error: {e}"
 
