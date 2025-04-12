@@ -236,7 +236,7 @@ class HomeApp(toga.App):
         box.add(back_button)
 
         game_img = toga.Image(self.paths.app / "resources/icon.png")
-        img = toga.ImageView(game_img)
+        img = toga.ImageView(game_img, style=stl_game_img)
         box.add(img)
 
         return box
