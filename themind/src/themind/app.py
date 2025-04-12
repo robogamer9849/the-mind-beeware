@@ -129,7 +129,10 @@ def handle_client(conn, addr, num):
                     print(nums[addr[0]])
                     conn.sendall(f"{nums[addr[0]]}".encode())
             elif message == 'I showed':
-                min_num = min(nums.values())
+                try:
+                    min_num = min(nums.values())
+                except ValueError:
+                    conn.sendall("not game".encode())
                 try:
                     if nums[addr[0]] == min_num:
                         conn.sendall("you won!".encode())
@@ -344,7 +347,10 @@ class HomeApp(toga.App):
                 elif response == "You lost!":
                     await asyncio.sleep(2)
                     stl_game_lose_img.visibility = "visible"
-                    self.stl_game_lose_img.visibility = "visible"        
+                    self.stl_game_lose_img.visibility = "visible" 
+                elif response == "not game":
+                    await asyncio.sleep(2)
+                    self.status_label.text = "the game has ended pls restart."
         except Exception as e:
             self.status_label.text = f"Error: {e}"
 
