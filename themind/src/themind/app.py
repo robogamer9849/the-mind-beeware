@@ -17,9 +17,10 @@ import asyncio
 
 # everywhare
 stl_back_button = Pack(padding=(10, 15, 10, 15), font_size=16)
+stl_game_img = Pack(width=150, height=150, flex = 1, visibility = "hidden")
 
 # home page
-stl_scrollview = Pack(direction=COLUMN, padding=20, alignment='center')
+stl_scrollview = Pack(direction=COLUMN, padding=1, alignment='center')
 
 stl_home_box = Pack(direction=COLUMN, padding=20, alignment='center')
 stl_home_btn_box = Pack(direction=COLUMN, padding=20, alignment='center')
@@ -200,14 +201,10 @@ class HomeApp(toga.App):
         # Host button
         host_button = toga.Button("Host", on_press=self.go_to_server, style=stl_host_button)
         options_box.add(host_button)
-        
-        # Status label for errors or info
-        # self.home_status_label = toga.MultilineTextInput(readonly = True, style=stl_home_status_label)
 
         self.tutorial_label = toga.MultilineTextInput(value=HELP_TEXT, readonly=True, style=stl_tutorial_label)
 
         box.add(self.tutorial_label)
-        # box.add(self.home_status_label)
 
         scrollveiw = toga.ScrollContainer(style=stl_scrollview, content=box)
 
@@ -237,22 +234,36 @@ class HomeApp(toga.App):
         back_button = toga.Button("Back to Home", on_press=self.go_home, style=stl_back_button)
         box.add(start_button)
         box.add(back_button)
+
+        game_img = toga.Image(self.paths.app / "resources/icon.png")
+        img = toga.ImageView(game_img)
+        box.add(img)
+
         return box
 
     def create_game_box(self):
         box = toga.Box(style=stl_create_game_box)
         self.number_label = toga.Label("Your number: ", style=stl_number_label)
-        self.status_label = toga.Label("", style=stl_status_label)
+        self.status_label = toga.Label("game in progress...", style=stl_status_label)
         self.ip_label = toga.Label("", style=stl_ip_label)
 
         self.show_button = toga.Button("SHOW", on_press=self.on_show_press, style=stl_show_button)
         back_button = toga.Button("Back to Home", on_press=self.go_home, style=stl_back_button)
-        
+
+        # game_img = toga.Image(self.paths.app / "resources/win.png")
+        # self.state_win_img = toga.ImageView(image = game_img, style=stl_game_img)
+
+        game_img = toga.Image(self.paths.app / "resources/lost.png")
+        self.state_lost_img = toga.ImageView(image = game_img, style=stl_game_img)
+
         box.add(self.number_label)
         box.add(self.status_label)
         box.add(self.ip_label)
         box.add(self.show_button)
         box.add(back_button)
+        # box.add(self.state_img)
+        # box.add(self.state_win_img)
+        box.add(self.state_lost_img)
         return box
 
     def go_to_server(self, widget):
@@ -324,9 +335,12 @@ class HomeApp(toga.App):
                 data = client_socket.recv(1024)
                 response = data.decode()
                 self.status_label.text = f"{response}"
-                if response == "You lost!":
+                if response == "You won!":
                     await asyncio.sleep(2)
-                    self.go_home()
+                    self.state_win_img.visibility = "visible"
+                elif response == "You lost!":
+                    await asyncio.sleep(2)
+                    self.state_lost_img.visibility = "visible"
         except Exception as e:
             self.status_label.text = f"Error: {e}"
 
