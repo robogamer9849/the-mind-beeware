@@ -15,7 +15,7 @@ import asyncio
 
 '''everything under this comment is for the style of the app'''
 
-# everywhare
+#  everywhare
 stl_back_button = Pack(padding=(10, 15, 10, 15), font_size=16)
 stl_game_img = Pack(width=150, height=150, flex = 1)
 stl_game_win_img = Pack(width=150, height=150, flex = 1, visibility = "hidden")
