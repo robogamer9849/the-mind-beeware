@@ -174,7 +174,7 @@ def start_server_in_background():
 class HomeApp(toga.App):
     def startup(self):
         # Create the main window.
-        self.main_window = toga.MainWindow(title=self.formal_name)
+        self.main_window = toga.MainWindow(title="THE MIND")
 
         # Create three boxes to act as our "screens"
         self.home_box = self.create_home_box()
