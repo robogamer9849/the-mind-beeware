@@ -153,7 +153,7 @@ def handle_client(conn, addr, num):
 
             elif message == 'I leave':
                     nums.pop(addr[0])
-                    max_points = max(points.values)
+                    max_points = max(points.values())
                     if points[addr[0]] == max_points:
                         conn.sendall("you won the whole game!!")
                     else:
