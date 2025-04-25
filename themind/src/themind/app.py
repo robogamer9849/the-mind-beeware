@@ -43,7 +43,7 @@ stl_start_button = Pack(padding=(15, 10, 15, 10), font_size=16, background_color
 # game page
 stl_create_game_box = Pack(direction=COLUMN, padding=20, alignment='center')
 stl_number_label = Pack(padding=(0, 15, 0, 15), font_size=24, font_weight='bold', text_align='center')
-stl_status_label = Pack(padding=(0, 10, 0, 10), font_size=16, color='#666666', text_align='center')
+stl_points_lable = Pack(padding=(0, 10, 0, 10), font_size=16, color='#666666', text_align='center')
 stl_ip_label = Pack(padding=(0, 10, 0, 10), font_size=16, text_align='center')
 stl_show_button = Pack(padding=(15, 10, 15, 10), font_size=18, background_color='#FF9800', color='white', flex=1, text_align='center')
 
@@ -102,6 +102,7 @@ HELP_TEXT = '''
 HOST = '0.0.0.0'
 PORT = 6000
 nums = {}
+points = {}
 
 
 def handle_client(conn, addr, num):
@@ -121,6 +122,17 @@ def handle_client(conn, addr, num):
                 else:
                     print(nums[addr[0]])
                     conn.sendall(f"{nums[addr[0]]}".encode())
+
+            elif message == 'give me points':
+                if addr[0] not in points:
+                    points[addr[0]] = 0
+                    point = points[addr[0]]
+                    conn.sendall(f"{point}".encode())
+                else:
+                    print(points[addr[0]])
+                    conn.sendall(f"{points[addr[0]]}".encode())
+
+
             elif message == 'I showed':
                 try:
                     min_num = min(nums.values())
@@ -130,9 +142,11 @@ def handle_client(conn, addr, num):
                     if nums[addr[0]] == min_num:
                         conn.sendall("you won!".encode())
                         nums.pop(addr[0])
+                        points[addr[0]] = points.get(addr[0], 0) + 1
                     else:
                         conn.sendall("you lost!".encode())
-                        nums.clear()
+                        nums.pop(addr[0])
+                        points[addr[0]] = points.get(addr[0], 0) - 1
                 except KeyError:
                     conn.sendall("you are not in the game".encode())
 
@@ -245,7 +259,7 @@ class HomeApp(toga.App):
     def create_game_box(self):
         box = toga.Box(style=stl_create_game_box)
         self.number_label = toga.Label("Your number: ", style=stl_number_label)
-        self.status_label = toga.Label("game in progress...", style=stl_status_label)
+        self.points_lable = toga.Label("your points will show here", style=stl_points_lable)
         self.ip_label = toga.Label("", style=stl_ip_label)
 
         self.show_button = toga.Button("SHOW", on_press=self.on_show_press, style=stl_show_button)
@@ -258,7 +272,7 @@ class HomeApp(toga.App):
         self.state_lost_img = toga.ImageView(image=game_img_lost, style=stl_game_lose_img)
 
         box.add(self.number_label)
-        box.add(self.status_label)
+        box.add(self.points_lable)
         box.add(self.ip_label)
         box.add(self.show_button)
         box.add(back_button)
@@ -314,7 +328,7 @@ class HomeApp(toga.App):
     def set_game_screen(self, number, host):
         self.number_label.text = f"Your number: {number}"
         self.ip_label.text = f"Code (IP): {host}"
-        self.status_label.text = "Game in progress..."
+        # self.points_lable.text = "Game in progress..."
 
     async def on_show_press(self, widget):
         # When SHOW is pressed, send the "I showed" command to the server.
@@ -333,7 +347,7 @@ class HomeApp(toga.App):
                 client_socket.sendall("I showed".encode())
                 data = client_socket.recv(1024)
                 response = data.decode()
-                self.status_label.text = f"{response}"
+                self.points_lable.text = f"{response}"
                 if response == "you won!":
                     self.state_win_img.visibility = "visible"
                     await asyncio.sleep(2)
@@ -341,10 +355,28 @@ class HomeApp(toga.App):
                     self.state_lost_img.visibility = "visible"
                     await asyncio.sleep(2)
                 elif response == "not game":
-                    self.status_label.text = "the game has ended, please restart."
+                    self.points_lable.text = "the game has ended, please restart."
                     await asyncio.sleep(2)
+            self.show_button.text = "show"
+
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
+                client_socket.connect((host_text, PORT))
+                client_socket.sendall("give me points".encode())
+                data = client_socket.recv(1024)
+                points = data.decode()
+                self.points_lable.text = f"{points}"
+
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
+                client_socket.connect((host_text, PORT))
+                client_socket.sendall("give me".encode())
+                data = client_socket.recv(1024)
+                number = data.decode()
+                print("Received number: ", number)
+                self.set_game_screen(number, host_text)
+                self.main_window.content = self.game_box
+
         except Exception as e:
-            self.status_label.text = f"Error: {e}"
+            self.points_lable.text = f"Error: {e}"
             print(e)
 
 
