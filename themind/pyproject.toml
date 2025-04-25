@@ -2,7 +2,7 @@
 [tool.briefcase]
 project_name = "The Mind"
 bundle = "com.example"
-version = "0.1.5"
+version = "0.1.6"
 url = "https://example.com/themind"
 license.file = "LICENSE"
 author = "taha415"
