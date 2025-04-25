@@ -129,7 +129,8 @@ def handle_client(conn, addr, num):
                     point = points[addr[0]]
                     conn.sendall(f"{point}".encode())
                 else:
-                    print(points[addr[0]])
+                    if points[addr[0]] < 0:
+                        points[addr[0]] = 0
                     conn.sendall(f"{points[addr[0]]}".encode())
 
 
