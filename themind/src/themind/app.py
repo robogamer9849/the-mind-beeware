@@ -91,10 +91,10 @@ HELP_TEXT = '''
     🎪 GAME TIME - IT'S MIND-BLOWING! 🎪
     • 🎭 You'll get a super-secret number (no peeking!)
     • 🎯 Feel like you're holding the lowest number? SHOW IT!
-    • ⭐ Nailed it? You're a legend!
-    • 💥 Missed it? KABOOM! Everyone goes down!
-    • 🎪 Victory dance when you reveal ALL numbers in order
-    • 🔄 Quick reset between rounds (auto-reset coming soon!)
+    • ⭐ Nailed it? You're a legend earn a point!
+    • 💥 Missed it? KABOOM! You lost a point!
+    • 🎪 game continues until you end it
+    • 🎉 The one with the most pionts wins
 
     🌟 READY TO BLOW SOME MINDS? LET'S ROLL! 🌟
     '''
@@ -275,7 +275,7 @@ class HomeApp(toga.App):
         self.ip_label = toga.Label("", style=stl_ip_label)
 
         self.show_button = toga.Button("SHOW", on_press=self.on_show_press, style=stl_show_button)
-        self.leave_button = toga.Button("Back to Home", on_press=self.leave_game, style=stl_back_button)
+        self.leave_button = toga.Button("give up and leave!", on_press=self.leave_game, style=stl_back_button)
 
         game_img_win = toga.Image(self.paths.app / "resources/win.png")
         self.state_win_img = toga.ImageView(image=game_img_win, style=stl_game_win_img)
