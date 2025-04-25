@@ -1,8 +1,3 @@
-"""
-game card The mind mad to a mobile game
-"""
-
-
 import toga
 from toga.style import Pack
 from toga.style.pack import COLUMN, ROW
@@ -16,48 +11,44 @@ import asyncio
 '''everything under this comment is for the style of the app'''
 
 #  everywhare
-stl_back_button = Pack(padding=(10, 15, 10, 15), font_size=16)
-stl_game_img = Pack(width=150, height=150, flex = 1)
-stl_game_win_img = Pack(width=150, height=150, flex = 1, visibility = "hidden")
-stl_game_lose_img = Pack(width=150, height=150, flex = 1, visibility = "hidden")
-
+stl_back_button = Pack(padding=(10, 15, 10, 15), alignment='center', font_size=16)
+stl_game_img = Pack(width=150, height=150, flex=1)
+stl_game_win_img = Pack(width=150, height=150, flex=1, alignment='center', visibility="hidden")
+stl_game_lose_img = Pack(width=150, height=150, flex=1, alignment='center', visibility="hidden")
 
 # home page
 stl_scrollview = Pack(direction=COLUMN, padding=1, alignment='center')
 
 stl_home_box = Pack(direction=COLUMN, padding=20, alignment='center')
 stl_home_btn_box = Pack(direction=COLUMN, padding=20, alignment='center')
-stl_home_title = Pack(padding=(0, 15, 0, 15), font_size=24, font_weight='bold')
+stl_home_title = Pack(padding=(0, 15, 0, 15), font_size=24, font_weight='bold', text_align='center')
 stl_options_box = Pack(direction=COLUMN, padding=20, alignment='center')
 
-stl_host_button = Pack(padding=(15, 10, 15, 10), font_size=16, background_color='#4CAF50', color='white')
+stl_host_button = Pack(padding=(15, 10, 15, 10), font_size=16, background_color='#4CAF50', color='white', flex=1, text_align='center')
 
 stl_client_box = Pack(direction=COLUMN, padding=20, alignment='center')
 stl_client_ip_input = Pack(padding=(10, 15, 10, 15), font_size=16)
-stl_connect_button = Pack(padding=(15, 10, 15, 10), font_size=16, background_color='#2196F3', color='white')
+stl_connect_button = Pack(padding=(15, 10, 15, 10), font_size=16, background_color='#2196F3', color='white', flex=1, text_align='center')
 
-stl_home_status_label = Pack(font_size=16, color='#666666', background_color='#f6f5f4')
-stl_tutorial_label = Pack(padding=(0, 10, 0, 10), height=1200, font_size=16, font_weight='bold', color='#333333', background_color='#FFE082', flex=1)
+stl_home_status_label = Pack(font_size=16, color='#666666', background_color='#f6f5f4', text_align='center')
+stl_tutorial_label = Pack(padding=(0, 10, 0, 10), height=600, font_size=16, font_weight='bold', color='#333333', background_color='#FFE082', flex=1)  # Reduced height, made scrollable
 
 # create server page
 stl_create_server_box = Pack(direction=COLUMN, padding=20, alignment='center')
-stl_server_status_label = Pack(padding=(0, 10, 0, 10), font_size=16, color='#666666')
-stl_max_number_label = Pack(padding=(0, 10, 0, 10), font_size=16)
+stl_server_status_label = Pack(padding=(0, 10, 0, 10), font_size=16, color='#666666', text_align='center')
+stl_max_number_label = Pack(padding=(0, 10, 0, 10), font_size=16, text_align='center')
 stl_max_number_slider = Pack(padding=(0, 15, 0, 15))
-stl_start_button = Pack(padding=(15, 10, 15, 10), font_size=16, background_color='#4CAF50', color='white')
+stl_start_button = Pack(padding=(15, 10, 15, 10), font_size=16, background_color='#4CAF50', color='white', flex=1, text_align='center')
 
 # game page
 stl_create_game_box = Pack(direction=COLUMN, padding=20, alignment='center')
-stl_number_label = Pack(padding=(0, 15, 0, 15), font_size=24, font_weight='bold')
-stl_status_label = Pack(padding=(0, 10, 0, 10), font_size=16, color='#666666')
-stl_ip_label = Pack(padding=(0, 10, 0, 10), font_size=16)
-stl_show_button = Pack(padding=(15, 10, 15, 10), font_size=18, background_color='#FF9800', color='white')
-
-
+stl_number_label = Pack(padding=(0, 15, 0, 15), font_size=24, font_weight='bold', text_align='center')
+stl_status_label = Pack(padding=(0, 10, 0, 10), font_size=16, color='#666666', text_align='center')
+stl_ip_label = Pack(padding=(0, 10, 0, 10), font_size=16, text_align='center')
+stl_show_button = Pack(padding=(15, 10, 15, 10), font_size=18, background_color='#FF9800', color='white', flex=1, text_align='center')
 
 
 '''this is the end of the style code'''
-
 
 
 def find_code():
@@ -68,13 +59,14 @@ def find_code():
     s.close()
     return ip
 
+
 max = 100
+
 
 def set_max(Max):
     global max
     max = Max
     return max
-
 
 
 # --- Global Variables and Network Code ---
@@ -110,6 +102,7 @@ HELP_TEXT = '''
 HOST = '0.0.0.0'
 PORT = 6000
 nums = {}
+
 
 def handle_client(conn, addr, num):
     print(f"Connection established with {addr}.")
@@ -149,6 +142,7 @@ def handle_client(conn, addr, num):
     conn.close()
     print(f"Connection with {addr} closed.")
 
+
 def start_server():
     print("start_server")
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
@@ -163,11 +157,13 @@ def start_server():
             print(f"Active connections: {threading.active_count() - 1}")
             print(nums)
 
+
 def start_server_in_background():
     print("start_server_in_background")
     thread = threading.Thread(target=start_server, daemon=True)
     thread.start()
     return "Server started"
+
 
 # --- BeeWare/Toga UI Application ---
 
@@ -187,23 +183,22 @@ class HomeApp(toga.App):
 
     def create_home_box(self):
         box = toga.Box(style=stl_home_btn_box)
-        title = toga.Label("🎮 Ready to play?\nLet's go! 🎲", style=stl_home_title)        
+        title = toga.Label("🎮 Ready to play?\nLet's go! 🎲", style=stl_home_title)
         box.add(title)
-        
+
         # Row for Host and Client options
         options_box = toga.Box(style=stl_options_box)
-        
-        
+
         # Client section: text input and connect button
         client_box = toga.Box(style=stl_client_box)
         self.client_ip_input = toga.TextInput(placeholder="Connect code (IP)", style=stl_client_ip_input)
         connect_button = toga.Button("Connect", on_press=self.on_connect_press, style=stl_connect_button)
         client_box.add(self.client_ip_input)
         client_box.add(connect_button)
-        
+
         options_box.add(client_box)
         box.add(options_box)
-        
+
         # Host button
         host_button = toga.Button("Host", on_press=self.go_to_server, style=stl_host_button)
         options_box.add(host_button)
@@ -225,18 +220,18 @@ class HomeApp(toga.App):
         self.max_number_label.text = f"max number : {state}"
         set_max(state)
 
-
     def create_server_box(self):
         box = toga.Box(style=stl_create_server_box)
         self.server_status_label = toga.Label("Press 'Start Server' to begin hosting", style=stl_server_status_label)
         box.add(self.server_status_label)
 
         self.max_number_label = toga.Label("max number : 100", style=stl_max_number_label)
-        self.slider = toga.Slider(min=0, max=1000, value=0, style=stl_max_number_slider, on_change= lambda slider: self.set_max_number_value(int(self.slider.value)))
+        self.slider = toga.Slider(min=0, max=1000, value=0, style=stl_max_number_slider,
+                                    on_change=lambda slider: self.set_max_number_value(int(self.slider.value)))
         box.add(self.max_number_label)
         box.add(self.slider)
 
-        start_button = toga.Button("Start Server", on_press=self.start_server_thread,  style=stl_start_button)
+        start_button = toga.Button("Start Server", on_press=self.start_server_thread, style=stl_start_button)
         back_button = toga.Button("Back to Home", on_press=self.go_home, style=stl_back_button)
         box.add(start_button)
         box.add(back_button)
@@ -256,18 +251,17 @@ class HomeApp(toga.App):
         self.show_button = toga.Button("SHOW", on_press=self.on_show_press, style=stl_show_button)
         back_button = toga.Button("Back to Home", on_press=self.go_home, style=stl_back_button)
 
-        game_img = toga.Image(self.paths.app / "resources/win.png")
-        self.state_win_img = toga.ImageView(image = game_img, style=stl_game_win_img)
+        game_img_win = toga.Image(self.paths.app / "resources/win.png")
+        self.state_win_img = toga.ImageView(image=game_img_win, style=stl_game_win_img)
 
-        game_img = toga.Image(self.paths.app / "resources/lost.png")
-        self.state_lost_img = toga.ImageView(image = game_img, style=stl_game_lose_img)
+        game_img_lost = toga.Image(self.paths.app / "resources/lost.png")
+        self.state_lost_img = toga.ImageView(image=game_img_lost, style=stl_game_lose_img)
 
         box.add(self.number_label)
         box.add(self.status_label)
         box.add(self.ip_label)
         box.add(self.show_button)
         box.add(back_button)
-        # box.add(self.state_img)
         box.add(self.state_win_img)
         box.add(self.state_lost_img)
         return box
@@ -317,7 +311,6 @@ class HomeApp(toga.App):
             print(error_text)
             self.tutorial_label.value = HELP_TEXT + "\n\n   error:\n" + '\n     ' + error_text
 
-
     def set_game_screen(self, number, host):
         self.number_label.text = f"Your number: {number}"
         self.ip_label.text = f"Code (IP): {host}"
@@ -327,7 +320,7 @@ class HomeApp(toga.App):
         # When SHOW is pressed, send the "I showed" command to the server.
         host_text = self.ip_label.text.replace("Code (IP): ", "").strip()
         self.show_button.text = 'showing in 3...'
-        await asyncio.sleep(1)        
+        await asyncio.sleep(1)
         self.show_button.text = 'showing in 2...'
         await asyncio.sleep(1)
         self.show_button.text = 'showing in 1...'
@@ -341,21 +334,23 @@ class HomeApp(toga.App):
                 data = client_socket.recv(1024)
                 response = data.decode()
                 self.status_label.text = f"{response}"
-                if response == "You won!":
+                if response == "you won!":
+                    self.state_win_img.visibility = "visible"
                     await asyncio.sleep(2)
-                    stl_game_win_img.visibility = "visible"
-                elif response == "You lost!":
+                elif response == "you lost!":
+                    self.state_lost_img.visibility = "visible"
                     await asyncio.sleep(2)
-                    stl_game_lose_img.visibility = "visible"
-                    self.stl_game_lose_img.visibility = "visible" 
                 elif response == "not game":
+                    self.status_label.text = "the game has ended, please restart."
                     await asyncio.sleep(2)
-                    self.status_label.text = "the game has ended pls restart."
         except Exception as e:
             self.status_label.text = f"Error: {e}"
+            print(e)
+
 
 def main():
     return HomeApp('HomeApp', 'org.beeware.homeapp')
+
 
 if __name__ == '__main__':
     main().main_loop()
