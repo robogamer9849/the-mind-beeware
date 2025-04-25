@@ -151,6 +151,17 @@ def handle_client(conn, addr, num):
                 except KeyError:
                     conn.sendall("you are not in the game".encode())
 
+            elif message == 'I leave':
+                    nums.pop(addr[0])
+                    max_points = max(points.values)
+                    if points[addr[0]] == max_points:
+                        conn.sendall("you won the whole game!!")
+                    else:
+                        conn.sendall("you lost the whole game!!")
+                    pionts.pop(addr[0])
+                    print(f"Player {addr[0]} has left the game.")
+                    break
+
         except ConnectionResetError:
             print(f"Client {addr} has disconnected.")
             break
@@ -264,7 +275,7 @@ class HomeApp(toga.App):
         self.ip_label = toga.Label("", style=stl_ip_label)
 
         self.show_button = toga.Button("SHOW", on_press=self.on_show_press, style=stl_show_button)
-        back_button = toga.Button("Back to Home", on_press=self.go_home, style=stl_back_button)
+        self.leave_button = toga.Button("Back to Home", on_press=self.leave_game, style=stl_back_button)
 
         game_img_win = toga.Image(self.paths.app / "resources/win.png")
         self.state_win_img = toga.ImageView(image=game_img_win, style=stl_game_win_img)
@@ -276,7 +287,7 @@ class HomeApp(toga.App):
         box.add(self.points_lable)
         box.add(self.ip_label)
         box.add(self.show_button)
-        box.add(back_button)
+        box.add(self.leave_button)
         box.add(self.state_win_img)
         box.add(self.state_lost_img)
         return box
@@ -379,6 +390,18 @@ class HomeApp(toga.App):
         except Exception as e:
             self.points_lable.text = f"Error: {e}"
             print(e)
+
+    async def leave_game(self, widget):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
+            client_socket.connect((self.ip_label.text.replace("Code (IP): ", "").strip(), PORT))
+            client_socket.sendall("I leave".encode())
+            data = client_socket.recv(1024)
+            response = data.decode()
+            print(response)
+    
+        self.points_lable.text = f"{response}"
+        await asyncio.sleep(3)
+        self.main_window.content = self.home_box
 
 
 def main():
