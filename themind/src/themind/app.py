@@ -72,7 +72,7 @@ def set_max(Max):
 # --- Global Variables and Network Code ---
 
 HELP_TEXT = '''
-    🎮 THE MIND - WHERE TELEPATHY MEETS FUN! 🎮
+    🎮 THE MIND - TELEPATHY GAME! 🎮
 
     🌟 LET'S GET THIS PARTY STARTED! 🌟
     👥 Round up your crew - the more players, the more mayhem!
@@ -83,22 +83,14 @@ HELP_TEXT = '''
     3. 🎯 One brave soul hits 'HOST'
     4. 🎲 Pick your challenge level
 
-    🔥 JOIN THE ADVENTURE:
-    • 📝 Grab that special code from your host
-    • 🎯 Smash that 'CONNECT' button
-    • 🌈 Let the magic begin!
-
-    🎪 GAME TIME - IT'S MIND-BLOWING! 🎪
-    • 🎭 You'll get a super-secret number (no peeking!)
-    • 🎯 Feel like you're holding the lowest number? SHOW IT!
-    • ⭐ Nailed it? You're a legend earn a point!
-    • 💥 Missed it? KABOOM! You lost a point!
-    • 🎪 game continues until you end it
-    • 🎉 The one with the most pionts wins
-
-    🌟 READY TO BLOW SOME MINDS? LET'S ROLL! 🌟
+    GAMEPLAY:
+    • 🎭 Get your secret number
+    • 🎯 Show if you think yours is lowest
+    • ⭐ Correct = +1 point
+    • 💥 Wrong = -1 point
+    • 🎉 Most points wins!
     '''
-
+    
 HOST = '0.0.0.0'
 PORT = 6000
 nums = {}
