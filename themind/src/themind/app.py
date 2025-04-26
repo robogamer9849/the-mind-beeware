@@ -144,13 +144,17 @@ def handle_client(conn, addr, num):
                     conn.sendall("you are not in the game".encode())
 
             elif message == 'I leave':
+                try:
                     nums.pop(addr[0])
-                    # max_points = max(points.values())
-                    # if points[addr[0]] == max_points:
-                    #     conn.sendall("you won the whole game!!")
-                    # else:
-                    #     conn.sendall("you lost the whole game!!")
+                    max_points = max(points.values())
+                    if points[addr[0]] == max_points:
+                        conn.sendall("you won the whole game!!")
+                    else:
+                        conn.sendall("you lost the whole game!!")
                     points.pop(addr[0])
+                except KeyError:
+                    conn.sendall("something bad heppend".encode())
+                finally:
                     print(f"Player {addr[0]} has left the game.")
                     break
 
@@ -351,12 +355,13 @@ class HomeApp(toga.App):
                 client_socket.sendall("I showed".encode())
                 data = client_socket.recv(1024)
                 response = data.decode()
-                self.points_lable.text = f"{response}"
                 if response == "you won!":
                     self.state_win_img.visibility = "visible"
-                    await asyncio.sleep(2)
+                    self.points_lable.text = "Woohoo! You're crushing it! 🎉"
+                    await asyncio.sleep(2)                
                 elif response == "you lost!":
                     self.state_lost_img.visibility = "visible"
+                    self.points_lable.text = "oops, better luck next time! 🙈"
                     await asyncio.sleep(2)
                 elif response == "not game":
                     self.points_lable.text = "the game has ended, please restart."
@@ -392,7 +397,7 @@ class HomeApp(toga.App):
             print(response)
     
         self.points_lable.text = f"{response}"
-        await asyncio.sleep(3)
+        await asyncio.sleep()
         self.main_window.content = self.home_box
 
 
