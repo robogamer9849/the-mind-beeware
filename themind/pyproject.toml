@@ -1,7 +1,7 @@
 # This project was generated with 0.3.22 using template: https://github.com/beeware/briefcase-template@v0.3.22
 [tool.briefcase]
 project_name = "The Mind"
-bundle = "com.example"
+bundle = "the.mind"
 version = "0.1.6"
 url = "https://example.com/themind"
 license.file = "LICENSE"
@@ -182,6 +182,4 @@ requires = [
 ]
 style_framework = "Shoelace v2.3"
 
-
-icon = "icons/icon"
 splash_background_color = "#D3E6F5"
