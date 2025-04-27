@@ -72,7 +72,7 @@ def set_max(Max):
 # --- Global Variables and Network Code ---
 
 HELP_TEXT = '''
-    🎮 THE MIND - WHERE TELEPATHY MEETS FUN! 🎮
+    🎮 THE MIND - TELEPATHY GAME! 🎮
 
     🌟 LET'S GET THIS PARTY STARTED! 🌟
     👥 Round up your crew - the more players, the more mayhem!
@@ -83,22 +83,14 @@ HELP_TEXT = '''
     3. 🎯 One brave soul hits 'HOST'
     4. 🎲 Pick your challenge level
 
-    🔥 JOIN THE ADVENTURE:
-    • 📝 Grab that special code from your host
-    • 🎯 Smash that 'CONNECT' button
-    • 🌈 Let the magic begin!
-
-    🎪 GAME TIME - IT'S MIND-BLOWING! 🎪
-    • 🎭 You'll get a super-secret number (no peeking!)
-    • 🎯 Feel like you're holding the lowest number? SHOW IT!
-    • ⭐ Nailed it? You're a legend earn a point!
-    • 💥 Missed it? KABOOM! You lost a point!
-    • 🎪 game continues until you end it
-    • 🎉 The one with the most pionts wins
-
-    🌟 READY TO BLOW SOME MINDS? LET'S ROLL! 🌟
+    GAMEPLAY:
+    • 🎭 Get your secret number
+    • 🎯 Show if you think yours is lowest
+    • ⭐ Correct = +1 point
+    • 💥 Wrong = -1 point
+    • 🎉 Most points wins!
     '''
-
+    
 HOST = '0.0.0.0'
 PORT = 6000
 nums = {}
@@ -152,13 +144,17 @@ def handle_client(conn, addr, num):
                     conn.sendall("you are not in the game".encode())
 
             elif message == 'I leave':
+                try:
                     nums.pop(addr[0])
-                    # max_points = max(points.values())
-                    # if points[addr[0]] == max_points:
-                    #     conn.sendall("you won the whole game!!")
-                    # else:
-                    #     conn.sendall("you lost the whole game!!")
+                    max_points = max(points.values())
+                    if points[addr[0]] == max_points:
+                        conn.sendall("you won the whole game!!")
+                    else:
+                        conn.sendall("you lost the whole game!!")
                     points.pop(addr[0])
+                except KeyError:
+                    conn.sendall("something bad heppend".encode())
+                finally:
                     print(f"Player {addr[0]} has left the game.")
                     break
 
@@ -359,12 +355,13 @@ class HomeApp(toga.App):
                 client_socket.sendall("I showed".encode())
                 data = client_socket.recv(1024)
                 response = data.decode()
-                self.points_lable.text = f"{response}"
                 if response == "you won!":
                     self.state_win_img.visibility = "visible"
-                    await asyncio.sleep(2)
+                    self.points_lable.text = "Woohoo! You're crushing it! 🎉"
+                    await asyncio.sleep(2)                
                 elif response == "you lost!":
                     self.state_lost_img.visibility = "visible"
+                    self.points_lable.text = "oops, better luck next time! 🙈"
                     await asyncio.sleep(2)
                 elif response == "not game":
                     self.points_lable.text = "the game has ended, please restart."
@@ -400,7 +397,7 @@ class HomeApp(toga.App):
             print(response)
     
         self.points_lable.text = f"{response}"
-        await asyncio.sleep(3)
+        await asyncio.sleep()
         self.main_window.content = self.home_box
 
 
