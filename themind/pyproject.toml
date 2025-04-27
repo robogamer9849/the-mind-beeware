@@ -26,6 +26,8 @@ test_requires = [
     "pytest",
 ]
 
+icon = "icons/icon"
+
 [tool.briefcase.app.themind.macOS]
 universal_build = true
 requires = [
