@@ -117,13 +117,14 @@ def handle_client(conn, addr, num):
 
             elif message == 'give me points':
                 if addr[0] not in points:
+                    #TODO: make points show to everyone
                     points[addr[0]] = 0
-                    point = points[addr[0]]
+                    point = points.items()
                     conn.sendall(f"{point}".encode())
                 else:
                     if points[addr[0]] < 0:
                         points[addr[0]] = 0
-                    conn.sendall(f"{points[addr[0]]}".encode())
+                    conn.sendall(f"{points}".encode())
 
 
             elif message == 'I showed':

@@ -6,13 +6,38 @@ version = "0.1.6"
 url = "https://example.com/themind"
 license.file = "LICENSE"
 author = "taha415"
-author_email = "taha415@example.com"
+author_email = "themind.lunar157@aleeas.com"
 
 [tool.briefcase.app.themind]
 formal_name = "The Mind"
 description = "game card The mind made to a mobile game"
-long_description = """More details about the app should go here.
+long_description = """The Mind: Challenge Your Sixth Sense!
+
+Can you trust your instincts to know when your number is the smallest?
+
+In The Mind mobile game:
+
+You hold a hidden number.
+
+You have only one button in front of you.
+
+Feel the perfect moment to tap!
+
+If you're right, you score a point!
+
+If you're wrong, you lose a life!
+
+Every decision is a matter of life and death.
+Every tap brings you closer to victory... or defeat.
+
+No words. No signs. Just pure feeling.
+It's just you — and one critical decision.
+
+Do you have the courage to press the button?
+
+The Mind – Where Silence Is Louder Than Words.
 """
+
 sources = [
     "src/themind",
 ]
